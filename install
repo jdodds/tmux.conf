@@ -2,7 +2,20 @@
 
 [[ $EUID == 0 ]] && echo 'do NOT' &&  exit 1
 
-here="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+rpath=$(command -v realpath)
+
+if [[ $(uname -s) = "Darwin" ]] && [[ ! -x $rpath ]] ; then
+    rpath=$(command -v grealpath)
+fi
+
+if [[ ! -x $rpath ]] ; then
+    echo "can't find realpath. if you're on osx, install brew and coreutils pls."
+    echo "otherwise i dunno, handle it."
+    exit 1;
+fi
+
+
+here="$($rpath "$(dirname "${BASH_SOURCE[0]}")")"
 
 conf="$HOME/.tmux.conf"
 
