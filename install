@@ -61,8 +61,8 @@ PermitLocalCommand=yes
 LocalCommand=tmux-color
 
 Host more.dums.*
-PermitLocalCommand=yes
-LocalCommand=tmux-color
+PermitLocalCommand yes
+LocalCommand tmux-color
 
 and u will have beaut shell
 "
