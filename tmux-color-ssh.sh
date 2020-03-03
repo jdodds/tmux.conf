@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-[[ -z "$TMUX_PANE" ]] && exit
+[[ -z "$TMUX_PANE" ]] || [[ "$#" -ne 1 ]] && exit
 
 
-colors=(17 22 35 66)
-
-c=${colors[$RANDOM % ${#colors[@]}]}
+c="$1"
 
 current=$(tmux select-pane -g -t "$TMUX_PANE")
 
-tmux select-pane -P "bg=colour$c" -t "$TMUX_PANE"
+tmux select-pane -P "bg=$c" -t "$TMUX_PANE"
 
 ( while kill -0 "$PPID" 2> /dev/null; do sleep 1; done
   tmux select-pane -P "$current" -t "$TMUX_PANE" ) &

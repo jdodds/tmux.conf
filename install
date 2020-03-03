@@ -57,12 +57,12 @@ ok ur set up now.
 make ur shell REMIND U U R SHELLED OUT by edit ~/.ssh/config to look like:
 
 Host some.dumb.host
-PermitLocalCommand=yes
-LocalCommand=tmux-color
+PermitLocalCommand yes
+LocalCommand tmux-color red
 
 Host more.dums.*
 PermitLocalCommand yes
-LocalCommand tmux-color
+LocalCommand tmux-color colour17
 
 and u will have beaut shell
 "
