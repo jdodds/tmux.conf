@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+[[ $EUID == 0 ]] && echo 'do NOT' &&  exit 1
+
+here="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+
+conf="$HOME/.tmux.conf"
+
+[[ -f $conf ]] && [[ ! -L $conf ]] && mv "$conf" "${conf}.bak"
+ln -sf "$here/tmux.conf" "$conf"
+
+[[ ! -d "$HOME/.ssh" ]] && echo 'u no ssh? k...' && exit 0
+
+modify_path() {
+    target="$HOME/.profile"
+    [[ -f "$target" ]] || target="$HOME/.bashrc" # tsk tsk but it's common
+
+    echo 'PATH=$PATH:$HOME/bin ; export $PATH' >> "$target"
+}
+
+if [[ ! -d "$HOME/bin" ]] ; then
+    echo "You don't have a ~/bin . you need one and i'm going to make it for you."
+    mkdir "$HOME/bin"
+fi
+
+if [[ ! "$PATH" =~ $HOME/bin ]] ; then
+    echo '$HOME/bin is not in your $PATH'
+    while true; do
+        read -r -p 'Do you want me to add it to your $PATH? [y/n]' r
+        case $r in
+            [Yy]* ) modify_path
+                    echo "run . $target to refresh ur path";;
+            [Nn]* ) echo "fine u need to do it tho";;
+            * ) echo "Y OR N PLS";;
+        esac
+    done
+fi
+
+ln -sf "$here/tmux-color-ssh.sh" "$HOME/bin/tmux-color"
+
+echo "
+ok ur set up now.
+
+make ur shell REMIND U U R SHELLED OUT by edit ~/.ssh/config to look like:
+
+Host some.dumb.host
+PermitLocalCommand=yes
+LocalCommand=tmux-color
+
+Host more.dums.*
+PermitLocalCommand=yes
+LocalCommand=tmux-color
+
+and u will have beaut shell
+"
