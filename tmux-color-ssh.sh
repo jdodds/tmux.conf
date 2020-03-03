@@ -2,14 +2,6 @@
 
 [[ -z "$TMUX_PANE" ]] && exit
 
-anywait() {
-    for pid in "$@"; do
-        while kill -0 "$pid"; do
-            sleep 0.5
-        done
-    done
-}
-
 
 colors=(
     12 17 18 22 23 24 34 35 36 37 38 39 52 53
@@ -18,8 +10,9 @@ colors=(
 
 c=${colors[$RANDOM % ${#colors[@]}]}
 
+current=$(tmux select-pane -g -t "$TMUX_PANE")
+
 tmux select-pane -P "bg=colour$c" -t "$TMUX_PANE"
 
-( anywait "$PPID"
+( while kill -0 "$PPID" 2> /dev/null; do sleep 1; done
   tmux select-pane -P "$current" -t "$TMUX_PANE" ) &
-
