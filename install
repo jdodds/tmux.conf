@@ -14,6 +14,10 @@ if [[ ! -x $rpath ]] ; then
     exit 1;
 fi
 
+if [[ $(uname -s) = "Darwin" ]] && [[ ! -x $(command -v reattach-to-user-namespace) ]] ; then
+    echo "you're going to need to 'brew install reattach-to-user-namespace' pls"
+    exit 1;
+fi
 
 here="$($rpath "$(dirname "${BASH_SOURCE[0]}")")"
 
