@@ -22,6 +22,10 @@ conf="$HOME/.tmux.conf"
 [[ -f $conf ]] && [[ ! -L $conf ]] && mv "$conf" "${conf}.bak"
 ln -sf "$here/tmux.conf" "$conf"
 
+if [[ $(uname -s) = "Darwin" ]] ; then
+    ln -sf "$here/tmux-macos.conf" "$HOME/.tmux-macos.conf"
+fi
+
 [[ ! -d "$HOME/.ssh" ]] && echo 'u no ssh? k...' && exit 0
 
 modify_path() {
