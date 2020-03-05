@@ -28,6 +28,7 @@ modify_path() {
     target="$HOME/.profile"
     [[ -f "$target" ]] || target="$HOME/.bashrc" # tsk tsk but it's common
 
+    # shellcheck disable=SC2016
     echo 'PATH=$PATH:$HOME/bin ; export $PATH' >> "$target"
 }
 
@@ -37,8 +38,10 @@ if [[ ! -d "$HOME/bin" ]] ; then
 fi
 
 if [[ ! "$PATH" =~ $HOME/bin ]] ; then
+    # shellcheck disable=SC2016
     echo '$HOME/bin is not in your $PATH'
     while true; do
+        # shellcheck disable=SC2016
         read -r -p 'Do you want me to add it to your $PATH? [y/n]' r
         case $r in
             [Yy]* ) modify_path
